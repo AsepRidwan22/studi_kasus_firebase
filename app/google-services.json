@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "188347282696",
+    "project_id": "studi-kasus-firebase",
+    "storage_bucket": "studi-kasus-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188347282696:android:1fad7fbe532ecb09ece8bd",
+        "android_client_info": {
+          "package_name": "com.example.studi_kasus_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188347282696-74cer81lc0br6g4ptup6m68eptr9bkkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studi_kasus_firebase",
+            "certificate_hash": "7c256bccd753d48f053e9be28b3466528f007534"
+          }
+        },
+        {
+          "client_id": "188347282696-8tjuh7gl8vhms3jr2g7cql9j0j39mmv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBavgXh9SNdmZavStpat5iWY-cTBsosTMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188347282696-8tjuh7gl8vhms3jr2g7cql9j0j39mmv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
