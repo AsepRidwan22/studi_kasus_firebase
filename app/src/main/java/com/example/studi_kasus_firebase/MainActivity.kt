@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.studi_kasus_firebase.databinding.ActivityMainBinding
+import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -18,6 +22,14 @@ class MainActivity : AppCompatActivity() {
 
         val editNominal = binding.nominalPinjaman.text
         val editTenor = binding.tenorBulan.text
+//        val editAngsuran = binding.tfAngsuran.text
+
+        // Get current date & time
+        val currentDateTime = LocalDateTime.now()
+        // Format date time style
+        currentDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        // Finalize convert format
+        val date = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm").format(currentDateTime)
 
         binding.btnSimulasi.setOnClickListener {
             binding.tfPinjaman.setText(editNominal.toString())
@@ -29,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             val kredit = hashMapOf(
                 "Nominal" to editNominal.toString(),
                 "Tenor" to editTenor.toString(),
+                "Angsuran" to hitungTenor(editNominal.toString().toInt(), editTenor.toString().toInt()),
+                "Timestamp" to currentDateTime.toString()
             )
 
             db.collection("kredits")
@@ -46,9 +60,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun hitungTenor(nominal:Int, tenor:Int) {
+    fun hitungTenor(nominal:Int, tenor:Int) : Double {
         val hasil = nominal / tenor * 0.5
         binding.tfAngsuran.setText(hasil.toString())
+        return hasil
     }
 
 }

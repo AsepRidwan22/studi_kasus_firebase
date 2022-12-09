@@ -20,6 +20,7 @@ import com.example.studi_kasus_firebase.databinding.FragmentHomeBinding
 import com.example.studi_kasus_firebase.databinding.FragmentUserBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.ByteArrayOutputStream
@@ -59,6 +60,8 @@ class HomeFragment : Fragment() {
             val kredit = hashMapOf(
                 "Nominal" to editNominal.toString(),
                 "Tenor" to editTenor.toString(),
+                "Angsuran" to hitungTenor(editNominal.toString().toInt(), editTenor.toString().toInt()),
+                "Timestamp" to ServerValue.TIMESTAMP
             )
 
             db.collection("kredits")
