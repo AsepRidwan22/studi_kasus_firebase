@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.edit
 import com.example.studi_kasus_firebase.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -15,6 +17,7 @@ import java.time.format.FormatStyle
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     val db = Firebase.firestore
+    lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,14 +25,9 @@ class MainActivity : AppCompatActivity() {
 
         val editNominal = binding.nominalPinjaman.text
         val editTenor = binding.tenorBulan.text
-//        val editAngsuran = binding.tfAngsuran.text
-
-        // Get current date & time
         val currentDateTime = LocalDateTime.now()
-        // Format date time style
         currentDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-        // Finalize convert format
-        val date = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm").format(currentDateTime)
+//        val date = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm").format(currentDateTime)
 
         binding.btnSimulasi.setOnClickListener {
             binding.tfPinjaman.setText(editNominal.toString())
@@ -49,13 +47,25 @@ class MainActivity : AppCompatActivity() {
                 .add(kredit)
                 .addOnSuccessListener { documentReference ->
                     Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    //link ke layout read
+                    val intent = Intent(this, DataActivity::class.java)
+                    intent.putExtra("idDoc",documentReference.id)
+                    startActivity(intent)
                 }
                 .addOnFailureListener { e ->
                     Log.w("TAG", "Error adding document", e)
                 }
-
-            //link ke layout read
-            val intent = Intent(this, DataActivity::class.java)
+        }
+        //baru
+        binding.btnLogout.setOnClickListener {
+            auth = FirebaseAuth.getInstance()
+            auth.signOut()
+            val preferences = getSharedPreferences("KEY_DATA", MODE_PRIVATE)
+            preferences.edit {
+                putString("email", "")
+                putString("password", "")
+            }
+            val intent = Intent(this ,LoginActivity::class.java)
             startActivity(intent)
         }
     }

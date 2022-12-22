@@ -20,13 +20,21 @@ class DataActivity : AppCompatActivity() {
 
 
         db = FirebaseFirestore.getInstance()
-        db.collection("kredits")
+        val  id = intent.getStringExtra("idDoc").toString()
+
+        if (intent.getStringExtra("idDoc").toString().isEmpty()){
+            val id = intent.getStringExtra("idUpdate").toString()
+        }
+
+        db.collection("kredits").document(
+            id
+        )
             .get()
             .addOnSuccessListener {
-                binding.edtNominal.setText(it.documents.last().data?.get("Nominal").toString())
-                binding.edtTenor.setText(it.documents.last().data?.get("Tenor").toString())
-                binding.edtAngsuran.setText(it.documents.last().data?.get("Angsuran").toString())
-                it.documents.last().data?.get("").toString()
+                binding.edtNominal.setText(it.data?.get("Nominal").toString())
+                binding.edtTenor.setText(it.data?.get("Tenor").toString())
+                binding.edtAngsuran.setText(it.data?.get("Angsuran").toString())
+                it.data?.get("").toString()
             }
             .addOnFailureListener{
                 it.printStackTrace()
@@ -36,17 +44,40 @@ class DataActivity : AppCompatActivity() {
 
 
         binding.btnDelete.setOnClickListener {
-            val idDoc =
             delete()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnUpdate.setOnClickListener {
+            update()
+        }
     }
 
     fun delete(){
-        db.collection("kredits").document("6xbczknqTH3l1zrYPTPP")
+        db.collection("kredits").document(intent.getStringExtra("idDoc").toString())
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    fun update(){
+        val editNominal = binding.edtNominal.text
+        val editTenor = binding.edtTenor.text
+
+        db.collection("kredits").document(intent.getStringExtra("idDoc").toString())
+            .update(mapOf(
+                "Nominal" to editNominal.toString(),
+                "Tenor" to editTenor.toString(),
+                "Angsuran" to editNominal.toString(),
+            ))
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully updated!")
+                Toast.makeText(this,"Data Berhasil DiUpdate",Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("idUpdate", intent.getStringExtra("idDoc").toString())
+                startActivity(intent)
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
     }
 }
